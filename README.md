@@ -1,6 +1,8 @@
 # firmware
 
-To flash the firmware into the ESP32 board you will need to install the Arduino IDE, the ESP32 boards manager and all the required libraries. 
+To flash the firmware into the ESP32 board you will need to install the Arduino IDE and all the required libraries from the Libraries directory. 
+
+Here you can find a tutorial on how to install the libraries: https://www.arduino.cc/en/Guide/Libraries
 
 Installation instructions using Arduino IDE Boards Manager
 ==========================================================
@@ -11,4 +13,3 @@ Starting with 1.6.4, Arduino allows installation of third-party platform package
 - Start Arduino and open Preferences window.
 - Enter ```https://dl.espressif.com/dl/package_esp32_index.json``` into *Additional Board Manager URLs* field. You can add multiple URLs, separating them with commas.
 - Open Boards Manager from Tools > Board menu and install *esp32* platform (and don't forget to select your ESP32 board from Tools > Board menu after installation).
-
