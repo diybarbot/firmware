@@ -280,7 +280,7 @@ void setup() {
   }
   
   // Create the BLE Device
-  BLEDevice::init("BartenderAI");
+  BLEDevice::init("DIYBar");
 
   // Create the BLE Server
   BLEServer *pServer = BLEDevice::createServer();
