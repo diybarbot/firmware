@@ -20,14 +20,7 @@
    Included in the GitHub repository https://github.com/diybar/firmware/Libraries
 */
 
-//Multiple cores
-#include <Streaming.h>      // Ref: http://arduiniana.org/libraries/streaming/
-#include "Workload.h"
-#include "Task1.h"
-TaskHandle_t TaskA;
-
-
-const bool debug = true;
+const bool debug = false;
 const bool debugLoop = false;
 const int numMotors = 9;
 const int maxMotorsRunning = 4;
@@ -69,6 +62,11 @@ void ledcAnalogWrite(uint8_t channel, uint32_t value, uint32_t valueMax = 255) {
   ledcWrite(channel, duty);
 }
 
+//Multiple cores
+#include <Streaming.h>      // Ref: http://arduiniana.org/libraries/streaming/
+#include "Workload.h"
+#include "Task1.h"
+TaskHandle_t TaskA;
 #include <QueueList.h>
 #include <BLEDevice.h>
 #include <BLEServer.h>
@@ -263,17 +261,16 @@ void setup() {
     }
   }
   
-  Serial.println("Bar v1.0");
+  Serial.println("Bar v1.6");
   
-  //pinMode(PWM_PIN, INPUT);
-  motor[0].initialize(32, 33); 
+  motor[0].initialize(32, 33);
   motor[1].initialize(25, 26);
   motor[2].initialize(27, 14);
-  motor[3].initialize(13, 23); 
-  motor[4].initialize( 1, 3);
-  motor[5].initialize(19, 18); 
+  motor[3].initialize(13, 23);
+  motor[4].initialize(21, 3);
+  motor[5].initialize(19, 18);
   motor[6].initialize( 5, 17);
-  motor[7].initialize(16, 4); 
+  motor[7].initialize(16, 4);
   motor[8].initialize(15, 2);
 
   ledcSetup(LEDC_CHANNEL_0, LEDC_BASE_FREQ, LEDC_TIMER_13_BIT);

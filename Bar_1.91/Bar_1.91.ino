@@ -11,7 +11,7 @@
    The design of creating the BLE server is:
    1. Create a BLE Server
    2. Create a BLE Service
-   3. Create a BLE Characteristic on the Service
+   3. Create a BLE Characteristic on the Service  S
    4. Create a BLE Descriptor on the characteristic
    5. Start the service.
    6. Start advertising.
@@ -20,14 +20,7 @@
    Included in the GitHub repository https://github.com/diybar/firmware/Libraries
 */
 
-//Multiple cores
-#include <Streaming.h>      // Ref: http://arduiniana.org/libraries/streaming/
-#include "Workload.h"
-#include "Task1.h"
-TaskHandle_t TaskA;
-
-
-const bool debug = true;
+const bool debug = false;
 const bool debugLoop = false;
 const int numMotors = 9;
 const int maxMotorsRunning = 4;
@@ -45,10 +38,7 @@ int fadeAmount = 10;    // how many points to fade the LED by
 #define LEDC_BASE_FREQ     5000
 
 // fade LED PIN (replace with LED_BUILTIN constant for built-in LED)
-#define LED_PIN            12
-
-// Distance Sensor PIN
-//#define PWM_PIN            22
+#define LED_PIN 12
 
 bool inProgress = false;
 bool backwardsOn = false;
@@ -69,6 +59,11 @@ void ledcAnalogWrite(uint8_t channel, uint32_t value, uint32_t valueMax = 255) {
   ledcWrite(channel, duty);
 }
 
+//Multiple cores
+#include <Streaming.h>      // Ref: http://arduiniana.org/libraries/streaming/
+#include "Workload.h"
+#include "Task1.h"
+TaskHandle_t TaskA;
 #include <QueueList.h>
 #include <BLEDevice.h>
 #include <BLEServer.h>
@@ -143,18 +138,8 @@ void setMotors(String command) {
               motor[motorNumber].run (BACKWARD | RELEASE);
               motorStarted = true;
           } else {   
-              if (glassDistance < minGlassDistance && glassDistance > 0) {
-                  motor[motorNumber].run (FORWARD | RELEASE);
-                  motorStarted = true;
-              } else {
-                  sendBTNotification("noGlass");
-                  if (debug) {
-                      Serial.println("Glass not ready");
-                  }
-                  if (!ledBlink) {
-                      startLedBlink();
-                  }
-              } 
+              motor[motorNumber].run (FORWARD | RELEASE);
+              motorStarted = true;
           }
           if (motorStarted) {
               if (motorsRunning == 0) {
@@ -263,18 +248,17 @@ void setup() {
     }
   }
   
-  Serial.println("Bar v1.0");
+  Serial.println("Bar v1.91_reverse");
   
-  //pinMode(PWM_PIN, INPUT);
-  motor[0].initialize(32, 33); 
-  motor[1].initialize(25, 26);
-  motor[2].initialize(27, 14);
-  motor[3].initialize(13, 23); 
-  motor[4].initialize( 1, 3);
-  motor[5].initialize(19, 18); 
-  motor[6].initialize( 5, 17);
-  motor[7].initialize(16, 4); 
-  motor[8].initialize(15, 2);
+  motor[0].initialize(33, 32);
+  motor[1].initialize(26, 25);
+  motor[2].initialize(14, 27);
+  motor[3].initialize(23, 13);
+  motor[4].initialize(3, 21);
+  motor[5].initialize(18, 19);
+  motor[6].initialize(17, 5);
+  motor[7].initialize(4, 16);
+  motor[8].initialize(2, 15);
 
   ledcSetup(LEDC_CHANNEL_0, LEDC_BASE_FREQ, LEDC_TIMER_13_BIT);
   ledcAttachPin(LED_PIN, LEDC_CHANNEL_0);
